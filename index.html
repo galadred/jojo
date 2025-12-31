@@ -1,1 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Pour ma Jojo</title>
+  <style>
 
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffb3d9, #ff80bf);
+      font-family: Arial, sans-serif;
+      transition: background 0.5s, filter 0.5s;
+    }
+
+    /* MODE NUIT */
+    .night {
+      background: linear-gradient(135deg, #2b0033, #1a001f);
+    }
+
+    /* GRAND CŒUR QUI BAT EN ARRIÈRE-PLAN */
+    .big-heart {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 350px;
+      opacity: 0.15;
+      animation: beat 1.5s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+      filter: drop-shadow(0 0 25px #ff66cc);
+    }
+
+    @keyframes beat {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      30% { transform: translate(-50%, -50%) scale(1.15); }
+      60% { transform: translate(-50%, -50%) scale(1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding-top: 40px;
+      width: 80%;
+      margin: auto;
+      color: white;
+      text-shadow: 0 0 10px black;
+    }
+
+    h1 {
+      color: #ffe6f2;
+      font-size: 40px;
+      margin-bottom: 10px;
+      transition: transform 0.3s, text-shadow 0.3s;
+    }
+
+    /* Animation du titre au survol */
+    h1:hover {
+      transform: scale(1.1);
+      text-shadow: 0 0 20px #ff99ff;
+    }
+
+    p {
+      font-size: 18px;
+      color: #fff;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #ff4d88;
+      color: white;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    button:hover {
+      background: #ff1a66;
+    }
+
+    /* Cœurs qui tombent */
+    .falling {
+      position: absolute;
+      top: -20px;
+      font-size: 20px;
+      animation: fall linear forwards;
+      opacity: 0.9;
+      z-index: 5;
+      transition: transform 0.3s, opacity 0.3s;
+      filter: drop-shadow(0 0 10px rgba(255, 100, 200, 0.9));
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    /* Explosion simple */
+    .explode {
+      animation: none;
+      transform: scale(2) rotate(45deg);
+      opacity: 0;
+    }
+
+    /* Compteur */
+    #counter {
+      margin-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffe6ff;
+      text-shadow: 0 0 10px #ff99ff;
+    }
+
+  </style>
+</head>
+<body>
+
+   <!-- GRAND CŒUR EN ARRIÈRE-PLAN -->
+   <div class="big-heart">❤️</div>
+
+   <div class="content">
+      <h1>Je t'aime</h1>
+      <p><i>
+      J'ai fais cette page web dans l'unique but que tu te souviennes que je tiens à toi
+      et que c'est une façon pour moi de te montrer que je tiens à toi ma chérie.
+      S'il te paraît moche au début c'est normal, je continuerai de l'améliorer au fil du temps.
+      Juste pour te dire que je t'aime et que tu es une fille incroyable, je sais que les temps sont dur mais ne t'inquiete pas je ne baisse pas les bras vu que je suis là pour rester avec toi pour toujours donc je vais tout faire pour te montrer que je tiens à toi et ça commence par cette page
+
+      </i></p>
+
+      <button id="btnColor">Changer couleur</button>
+      <button id="btnExplode">Explosion</button>
+      <button id="btnNight">Mode nuit</button>
+
+      <div id="counter">Cœurs explosés : 0</div>
+   </div>
+
+   <audio id="music" src="totoro.mp3" autoplay loop></audio>
+   <audio id="pop" src="pop.mp3"></audio>
+
+<script>
+
+  let colors = ["❤️", "💙", "💜", "💚", "💛", "🧡", "🤍", "💖"];
+  let currentColor = 0;
+  let explosionMode = false;
+  let nightMode = false;
+  let explodedCount = 0;
+
+  document.getElementById("btnColor").addEventListener("click", () => {
+    currentColor = (currentColor + 1) % colors.length;
+  });
+
+  document.getElementById("btnExplode").addEventListener("click", () => {
+    explosionMode = !explosionMode;
+  });
+
+  document.getElementById("btnNight").addEventListener("click", () => {
+    nightMode = !nightMode;
+    document.body.classList.toggle("night");
+  });
+
+  function createFallingElement() {
+    const element = document.createElement("div");
+    element.classList.add("falling");
+
+    element.textContent = colors[currentColor];
+
+    element.style.left = Math.random() * 100 + "vw";
+    element.style.fontSize = (20 + Math.random() * 40) + "px";
+    element.style.animationDuration = (3 + Math.random() * 4) + "s";
+
+    document.body.appendChild(element);
+
+    // Explosion automatique si le mode est activé
+    if (explosionMode) {
+      setTimeout(() => {
+        element.classList.add("explode");
+        document.getElementById("pop").play();
+        explodedCount++;
+        document.getElementById("counter").textContent =
+          "Cœurs explosés : " + explodedCount;
+        setTimeout(() => element.remove(), 300);
+      }, 100);
+    }
+
+    setTimeout(() => element.remove(), 7000);
+  }
+
+  setInterval(createFallingElement, 200);
+
+</script>
+
+</body>
+</html>
